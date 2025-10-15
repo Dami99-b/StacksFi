@@ -8,11 +8,11 @@ export default function Home() {
 
   const handleEnter = () => {
     setEntered(true);
-    setTimeout(() => router.push("/dashboard"), 700);
+    setTimeout(() => router.push("/dashboard"), 600);
   };
 
   return (
-    <><AnimatedBackground />
+    <>
       {!entered ? <AnimatedIntro onEnter={handleEnter} /> : (
         <div className="min-h-screen flex items-center justify-center">
           <p>Loading StackFi...</p>
