@@ -12,7 +12,7 @@ export default function Home() {
   };
 
   return (
-    <>
+    <><AnimatedBackground />
       {!entered ? <AnimatedIntro onEnter={handleEnter} /> : (
         <div className="min-h-screen flex items-center justify-center">
           <p>Loading StackFi...</p>
