@@ -3,6 +3,20 @@ import WalletGenerator from "../components/WalletGenerator";
 import AIAssistant from "../components/AIAssistant";
 import NewsFeed from "../components/NewsFeed";
 import { createNewWallet } from '../utils/wallet';
+import { fetchDeFiHeadlines } from '../utils/news';
+
+useEffect(() => {
+  const loadNews = async () => {
+    try {
+      const articles = await fetchDeFiHeadlines();
+      setHeadlines(articles);
+    } catch (error) {
+      console.error('Error fetching news:', error);
+      setHeadlines([]);
+    }
+  };
+  loadNews();
+}, []);
 
 async function handleCreateWallet() {
   try {
