@@ -19,7 +19,7 @@ export default function AIAssistant() {
       setAnswer(data?.answer || "No answer returned.");
     } catch (err) {
       console.error(err);
-      setAnswer("AI error.");
+      setAnswer("AI error or OPENAI_API_KEY not set.");
     } finally {
       setLoading(false);
     }
@@ -33,7 +33,7 @@ export default function AIAssistant() {
         className="w-full p-3 rounded-lg bg-[#0b0b12] text-white"
         value={prompt}
         onChange={(e) => setPrompt(e.target.value)}
-        placeholder="Ask StackFi about DeFi opportunities, sBTC, or how to use Stacks..."
+        placeholder="Ask StackFi AI about DeFi opportunities, sBTC, or how to use Stacks..."
       />
       <div className="flex items-center gap-3 mt-4">
         <button onClick={askAI} disabled={loading} className="px-5 py-2 rounded-lg bg-gradient-to-r from-pink-500 to-orange-500 font-semibold">
