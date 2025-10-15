@@ -22,7 +22,7 @@ export default function AnimatedIntro({ onEnter }) {
       </motion.h1>
 
       <motion.p className="mt-3 text-gray-300 max-w-xl text-center px-4">
-        AI-powered DeFi tools on Stacks — a polished demo for the Stacks hackathons.
+        AI-powered DeFi tools on Stacks — a polished demo for Stacks hackathons.
       </motion.p>
 
       <motion.button
