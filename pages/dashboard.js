@@ -2,6 +2,18 @@ import StackFiLogo from "../components/StackFiLogo";
 import WalletGenerator from "../components/WalletGenerator";
 import AIAssistant from "../components/AIAssistant";
 import NewsFeed from "../components/NewsFeed";
+import { createNewWallet } from '../utils/wallet';
+
+async function handleCreateWallet() {
+  try {
+    setWalletStatus('Generating...');
+    const newWallet = await createNewWallet();
+    setWalletAddress(newWallet.address);
+    setWalletStatus('Wallet Created ✅');
+  } catch (err) {
+    setWalletStatus('Error: Could not generate wallet');
+  }
+}
 
 export default function Dashboard() {
   return (
