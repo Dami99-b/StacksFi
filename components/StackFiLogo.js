@@ -17,5 +17,5 @@ export default function StackFiLogo({ size = 64 }) {
         S
       </span>
     </div>
-  )
+  );
 }
