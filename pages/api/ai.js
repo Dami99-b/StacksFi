@@ -8,6 +8,10 @@ export default async function handler(req, res) {
 
   if (!prompt) return res.status(400).json({ error: "No prompt provided" });
 
+  if (!process.env.OPENAI_API_KEY) {
+    return res.status(200).json({ answer: "OpenAI key not set — AI disabled for this demo." });
+  }
+
   try {
     const completion = await client.chat.completions.create({
       model: "gpt-4o-mini",
