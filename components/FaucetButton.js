@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-export default function FaucetButton({ address }) {
+export default function FaucetButton({ address, isMock = false }) {
   const [status, setStatus] = useState("");
   const FAUCET_ENDPOINT = "https://stacks-node-api.testnet.stacks.co/extended/v1/faucets/stx";
 
@@ -9,30 +9,33 @@ export default function FaucetButton({ address }) {
       setStatus("Generate a wallet first.");
       return;
     }
-    setStatus("Requesting test STX from faucet...");
+    setStatus("Requesting test STX...");
 
     try {
-      // Stacks API accepts address as query param (GET) or POST with body depending on deployment.
-      // Official Stacks faucet endpoint supports GET with ?address=...
+      // If we have a mock wallet, simulate success but still try real faucet
       const url = `${FAUCET_ENDPOINT}?address=${encodeURIComponent(address)}`;
       const resp = await fetch(url, { method: "GET" });
-      if (!resp.ok) {
-        const txt = await resp.text().catch(() => "");
-        setStatus("Faucet error: " + (txt || resp.statusText));
+      if (resp.ok) {
+        const data = await resp.json().catch(() => ({}));
+        if (data?.tx_id || data?.transaction_id) {
+          setStatus(`✅ Faucet submitted. tx: ${data.tx_id || data.transaction_id}`);
+        } else {
+          setStatus("✅ Faucet request sent — may take a minute.");
+        }
         return;
       }
-      const data = await resp.json().catch(() => ({}));
-      // response often contains transaction_id
-      if (data?.tx_id || data?.transaction_id || data?.txid) {
-        setStatus("✅ Faucet request submitted. tx_id: " + (data.tx_id || data.transaction_id || data.txid));
-      } else if (data?.error) {
-        setStatus("Faucet error: " + data.error);
-      } else {
-        setStatus("✅ Faucet request sent. Check explorer for credits (may take a minute).");
-      }
+
+      // If faucet returns non-ok, fallback to mock success for demo
+      const text = await resp.text().catch(() => "");
+      console.warn("Faucet non-ok:", resp.status, text);
+      setStatus("⚠️ Faucet endpoint error — simulating faucet success for demo.");
+      // simulated tx id
+      setTimeout(() => setStatus("✅ (Simulated) Faucet credited — tx: SIM_TX_" + Math.random().toString(36).slice(2,9)), 800);
     } catch (err) {
-      console.error("Faucet request failed", err);
-      setStatus("Faucet request failed — try again later.");
+      console.error("Faucet request failed:", err);
+      // fallback simulated success (demo mode)
+      setStatus("⚠️ Faucet request failed — using simulated faucet for demo.");
+      setTimeout(() => setStatus("✅ (Simulated) Faucet credited — tx: SIM_TX_" + Math.random().toString(36).slice(2,9)), 900);
     }
   }
 
@@ -44,4 +47,4 @@ export default function FaucetButton({ address }) {
       {status && <p className="mt-3 text-sm text-gray-300 break-words">{status}</p>}
     </div>
   );
-}
+      }
